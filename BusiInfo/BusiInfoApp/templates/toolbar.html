@@ -1,0 +1,49 @@
+{% load static %}
+{% block toolbar %}
+
+<div class="navbar-custom">
+    <ul class="list-unstyled topnav-menu float-right mb-0">
+        <li class="dropdown notification-list">
+            <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                <img src="/static/images/users/user-3.jpg" alt="user-image" class="rounded-circle">
+                {% if owner_name %}
+                <span class="pro-user-name ml-1">
+                    {{ owner_name }} <i class="mdi mdi-chevron-down"></i>
+                </span>
+                {% else %}
+                <span class="pro-user-name ml-1">
+                    {{ user_name }} <i class="mdi mdi-chevron-down"></i>
+                </span>
+                {% endif %}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
+                <!-- item-->
+                <div class="dropdown-header noti-title">
+                    <h6 class="text-overflow m-0">Welcome !</h6>
+                </div>
+
+                <div class="dropdown-divider"></div>
+
+                <!-- item-->
+                <a href="/logout/" class="dropdown-item notify-item">
+                    <i class="fe-log-out"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </li>
+    </ul>
+
+    <!-- LOGO -->
+    <div class="logo-box pl-2" style="width:max-content">
+        <a href="javascript:" class="logo text-center">
+            <span class="logo-lg">
+                <span class="logo-lg-text-light">{{ appName }}</span>
+            </span>
+            <span class="logo-sm">
+                <span class="logo-sm-text-dark">{{ appName }}</span>
+            </span>
+        </a>
+    </div>
+</div>
+
+{% endblock %}

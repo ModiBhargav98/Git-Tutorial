@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+    <html lang="en">
+<head>
+    {% load static %}
+    {% include 'css.html' %}
+    {% block 'css' %}
+    {% endblock %}
+    <style>
+        .msg_success {
+            text-align: center;
+            width: 80%;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            height: max-content;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+    <body>
+
+        <!-- Begin page -->
+        <div id="wrapper">
+
+            <!-- Topbar Start -->
+            {% include 'toolbar.html' %}
+            {% block toolbar %}
+            {% endblock %}
+            <!-- end Topbar -->
+
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page" style="margin-left:0 !important;">
+                <div class="content">
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title">Profile</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-lg-4 col-xl-4">
+                                <div class="text-center card-box">
+                                    <div class="pt-2 pb-2">
+                                        <img src="/static/images/users/user-4.jpg" class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+
+                                        <h4 class="mt-3"><a href="javascript:" class="text-dark text-uppercase">{{ user_name }}</a></h4>
+                                        <p class="text-muted m-0">Enroll: <span> | </span> <span class="text-pink enroll_id">{{ enroll_no }}</span></p>
+
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="mt-3s">
+                                                    <p class="mb-0 text-pink text-truncate font-20"> {{ total_business }} </p>
+                                                    <p class="mb-0 text-muted text-truncate">Total Business</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="mt-3s">
+                                                    <p class="mb-0 text-pink text-truncate font-20"> {{ total_products }} </p>
+                                                    <p class="mb-0 text-muted text-truncate">Total Products</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end row-->
+                                        <p class="font-14 text-center text-muted mt-3">
+                                            {{ about_user_text }}
+                                        </p>
+                                        <button type="button" class="open-store btn btn-primary btn-sm waves-effect waves-light">View Store</button>
+                                    </div> <!-- end .padding -->
+                                </div> <!-- end card-box-->
+
+                            </div> <!-- end col-->
+
+                            <div class="col-lg-8 col-xl-8">
+                                <div class="card-box">
+                                    <ul class="nav nav-pills navtab-bg nav-justified">
+                                        <li class="nav-item">
+                                            <a href="#sellers" data-toggle="tab" aria-expanded="false" class="nav-link active">
+                                                All Sellers
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#store" data-toggle="tab" aria-expanded="false" class="nav-link">
+                                                Store
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#settings" data-toggle="tab" aria-expanded="false" class="nav-link">
+                                                Profile Settings
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane show" id="store">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="card-box">
+                                                        <div class="row">
+                                                            <div class="col-lg-8">
+                                                                <form class="form-inline">
+                                                                    <div class="form-group">
+                                                                        <label for="inputPassword2" class="sr-only">Search</label>
+                                                                        <input type="search" class="form-control search-product" id="inputPassword2"
+                                                                            placeholder="Search...">
+                                                                    </div>
+                                                                    <div class="form-group mx-sm-3 d-none">
+                                                                        <label for="status-select" class="mr-2">Sort By</label>
+                                                                        <select class="custom-select" id="status-select">
+                                                                            <option selected="">All</option>
+                                                                            <option value="1">Popular</option>
+                                                                            <option value="2">Price Low</option>
+                                                                            <option value="3">Price High</option>
+                                                                            <option value="4">Sold Out</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div> <!-- end row -->
+                                                    </div> <!-- end card-box -->
+                                                </div> <!-- end col-->
+                                            </div>
+                                            <!-- end row-->
+                                    
+                                            <div class="row all-products">
+                                                {% for product in products %}
+                                                <div class="col-md-6 col-xl-4 product-item">
+                                                    <div class="card-box product-box">
+                                                        <div style="position: relative; cursor: pointer;" product_name="{{ procuct.product_name }}" price="{{ product.price }}" category="{{ product.category }}" desc="{{ product.product_desc }}">
+                                                            <span title="Save {{ product.product_name }}" data-plugin="tippy" data-tippy-size="small" style="position: absolute; top: 5px; z-index: 99; right: 5px;font-size:16px;">
+                                                                <i class="mdi mdi-heart-outline text-danger font-24"></i>
+                                                            </span>
+                                                            <span style="position: absolute;z-index: 99;background-color: transparent;" class="product-price-tag"><i class="mdi mdi-currency-inr"></i>{{ product.price }}</span>
+                                                            <div class="waves-effect product-view" href="#custom-modal" data-animation="blur" data-plugin="custommodal" data-overlayColor="#38414a">
+                                                                <div class="d-none p_details" price="{{ product.price }}" name="{{ product.product_name }}" desc="{{ product.product_desc }}" pid="{{ product.product_id }}" rfid="{{ product.rfid }}" company="{{ product.seller }}"></div>
+                                                                <img src="/static/images/products/product-1.jpg" alt="product-pic" class="img-fluid" />
+                                                            </div>
+                                                            <span class="text-capitalize" style="position: absolute; bottom: 5px; z-index: 99; right: 5px;font-size:16px;">{{ product.product_name }}</span>
+                                                        </div>
+                                                    </div> <!-- end card-box -->
+                                                </div> <!-- end col -->
+                                                {% endfor %}
+                                            </div>
+                                            <!-- end row-->
+                                        </div> <!-- end tab-pane -->
+                                        <div class="tab-pane show active" id="sellers">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="card-box">
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                <div class="form-group">
+                                                                    <label for="inputPassword2" class="sr-only">Search Sellers</label>
+                                                                    <input type="search" class="form-control search-seller" id="inputPassword2"
+                                                                        placeholder="Search...">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-5 d-none">
+                                                                <div class="text-lg mt-0">
+                                                                    <button href="javascript: void(0);" class="btn btn-danger waves-effect waves-light"><i class="mdi mdi-plus-circle mr-1"></i> New Seller</button>
+                                                                </div>
+                                                            </div>
+                                                            <!-- end col-->
+                                                        </div>
+                    
+                                                        <div class="inbox-widget slimscroll" style="max-height: 310px;">
+                                                            {% for slr in sellers %}
+                                                            <div class="inbox-item seller-item" reg_date="{{ slr.reg_date}}" about="{{ slr.about }}" type="{{ slr.type }}" address="{{ slr.address }}" mobile="{{ slr.mobile }}">
+                                                                <div class="inbox-item-img"><img src="/static/images/users/user.jpg" class="rounded-circle" alt=""></div>
+                                                                <p class="inbox-item-author">{{ slr.name }}</p>
+                                                                <p class="inbox-item-text">{{ slr.company }}</p>
+                                                                <p class="inbox-item-date">
+                                                                    <a href="javascript:;" class="view-seller btn btn-sm btn-primary waves-effect waves-light font-13">View</a>
+                                                                </p>
+                                                            </div>
+                                                            {% endfor %}
+                                                        </div> <!-- end inbox-widget -->
+                    
+                                                    </div> <!-- end card-box-->
+                                                </div> <!-- end col-->
+
+                                                <div class="col-6 seller-info">
+                                                    <div class="card">
+                                                        <img class="card-img-top img-fluid" src="/static/images/small/img-1.jpg" alt="Card image cap">
+                                                        <div class="card-body">
+                                                            <h2 class="card-title text-uppercase">{{ business_name }}</h2>
+                                                            <style>
+                                                                .card-details label,
+                                                                .card-details label i,
+                                                                .card-details p i {
+                                                                    margin-right: 5px;
+                                                                }
+                                                            </style>
+                                                            <div class="card-details">
+                                                                <label class="card-mobile"><i class="mdi mdi-phone"></i> <span>business_mobile</span></label>
+                                                                <label class="card-type"><i class="mdi mdi-briefcase"></i> <span>business_type</span></label>
+                                                            </br>
+                                                                <label class="card-reg-date"><i class="icon-calender"></i> <span>business_reg_date</span></label>
+                                                                <label class="card-address"><i class="icon-location-pin"></i><span> business_address</span></label>
+                                                                <p class="card-about-text"><i class="mdi mdi-comment-text"></i> <span>business_about</span></p>
+                                                            </div>
+                                                            <a href="javascript:;" class="d-none btn btn-primary btn-sm waves-effect waves-light">Open Seller Profile</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- end row-->
+                                    
+                                        </div> <!-- end tab-pane -->
+                                        <!-- end about me section content -->
+                                    
+                                        <div class="tab-pane" id="settings">
+                                            <form class="row">
+                                                {% csrf_token %}
+                                                <div class="col-6 personal-info">
+                                                    <h5 class="mb-2 text-uppercase bg-light p-2"><i class="mdi mdi-account-circle mr-1"></i> Personal Info</h5>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="fullname">Full Name</label>
+                                                                <input disabled type="text" class="form-control" id="fullname" placeholder="Enter full name" value="{{ user_name }}">
+                                                            </div>
+                                                        </div> <!-- end col -->
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="fathername">Father Name</label>
+                                                                <input disabled type="text" class="form-control" id="fathername" placeholder="Enter full name" value="{{ fathername }}">
+                                                            </div>
+                                                        </div> <!-- end col -->
+                                                    </div> <!-- end row -->
+                                                    
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="dob">Date of Birth</label>
+                                                                <input disabled type="text" class="form-control" id="dob" placeholder="Enter dob" value="{{ dob }}">
+                                                            </div>
+                                                        </div> <!-- end col -->
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="gender">Gender</label>
+                                                                <input disabled type="text" class="form-control" id="gender" placeholder="Enter gender" value="{{ gender }}">
+                                                            </div>
+                                                        </div> <!-- end col -->
+                                                    </div> <!-- end row -->
+                                                
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="userpassword">Password</label>
+                                                                <input type="password" class="form-control" id="userpassword" placeholder="Enter password" value="{{ password }}">
+                                                            </div>
+                                                        </div> <!-- end col -->
+                                                    </div> <!-- end row -->
+                                                </div>
+                                                <div class="col-6">
+                                                    <h5 class="mb-2 text-uppercase bg-light p-2"><i class="mdi mdi-phone mr-1"></i> Contact Info</h5>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="mobile">Mobile</label>
+                                                                <input disabled type="text" class="form-control" id="mobile" placeholder="Enter mobile" value="{{ mobile }}">
+                                                            </div>
+                                                        </div> <!-- end col -->
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="city">City</label>
+                                                                <input disabled type="text" class="form-control" id="city" placeholder="Enter city" value="{{ city }}">
+                                                            </div>
+                                                        </div> <!-- end col -->
+                                                    </div>
+                                                    
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="state">State</label>
+                                                                <input disabled type="text" class="form-control" id="state" placeholder="Enter state" value="{{ state }}">
+                                                            </div>
+                                                        </div> <!-- end col -->
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="address">Address</label>
+                                                                <input disabled type="text" class="form-control" id="address" placeholder="Enter address" value="{{ address }}">
+                                                            </div>
+                                                        </div> <!-- end col -->
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <div class="col-12 text-right" style="position: relative;">
+                                                <p class="msg_success profile-msg text-success"></p>
+                                                <button type="button" class="profile-update btn btn-success waves-effect waves-light mt-2"><i
+                                                        class="mdi mdi-content-save"></i> Save</button>
+                                            </div>
+                                        </div>
+                                        <!-- end settings content-->
+                                    </div> <!-- end tab-content -->
+                                </div> <!-- end card-box-->
+
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row-->
+
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+
+                <footer class="footer footer-alt">
+                    &copy; <a href="javascript:" class="text-black-50">{{ appName }}</a> 2020
+                </footer>
+
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- End Page content -->
+            <!-- ============================================================== -->
+
+
+        </div>
+        <!-- END wrapper -->
+
+        <!-- Custom Modal -->
+        <div id="custom-modal" class="modal-demo">
+            <button type="button" class="close" onclick="Custombox.modal.close();">
+                <span>&times;</span><span class="sr-only">Close</span>
+            </button>
+            <h4 class="custom-modal-title">Product Details</h4>
+            <div class="custom-modal-text">
+                <div class="row">
+                    <div class="col-xl-5">
+                        <div class="tab-content pt-0">
+                            <div class="tab-pane active show" id="product-1-item">
+                                <img src="/static/images/products/product-1.jpg" alt="" class="img-fluid mx-auto d-block rounded">
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                    <div class="col-xl-7">
+                        <div class="pl-xl-3 mt-3 mt-xl-0 product-show">
+                            <a href="javascript:" class="text-primary product-id">{{ product_id }}</a>
+                            <h4 class="mb-0 product-name text-uppercase">{{ product_name }}</h4>
+                            <h5 class="mb-3">Sold by: <span class="company-name text-uppercase">{{ company_name }}</span></h5>
+                            
+                            <h4 class="mb-4">Price : <b class="product-price">{{ product_price }}</b></h4>
+                            <p class="text-muted mb-4 product-desc">{{ product_desc }}</p>
+
+                            <div class="d-none">
+                                <button type="button" class="btn btn-danger waves-effect waves-light">
+                                    <span class="btn-label"><i class="mdi mdi-heart-outline"></i></span>Add to wishlist
+                                </button>
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div>
+                <!-- end row -->
+            </div>
+        </div>
+
+        {% include 'js.html' %}
+        {% block 'js' %}
+        {% endblock %}
+
+        <script>
+            $(document).ready(function(){
+                $('.profile-update').click(function(){
+                    //var id = $('.enroll_id').text()
+                    //var password = $('.personal-info #userpassword').val()
+                    //alert(`${id}, ${password}`)
+                    updateProfile()
+                });
+                $('.open-store').click(function(){
+                    $("a[href='#store']").click();
+                });
+                $('.view-seller').click(function(){
+                    var info = $(this).parents('.seller-item');
+                    var seller_card = $('.seller-info .card-body');
+
+                    seller_card.find('.card-title').text(info.find('.inbox-item-text').text())
+                    seller_card.find('.card-mobile span').text(info.attr('mobile'))
+                    seller_card.find('.card-type span').text(info.attr('type'))
+                    seller_card.find('.card-reg-date span').text(info.attr('reg_date'))
+                    seller_card.find('.card-address span').text(info.attr('address'))
+                    seller_card.find('.card-about-text span').text(info.attr('about'))
+                });
+                $('.view-seller').eq(0).click();
+                function search(ele_class, item_class) {
+                    $(ele_class).keyup(function(){
+                        $(item_class).hide();
+                        var txt = $(this).val();
+                        $(item_class).each(function(){
+                            if($(this).text().toUpperCase().indexOf(txt.toUpperCase()) != -1){
+                                $(this).show();
+                            }
+                        });
+                    });
+                }
+                search('.search-seller', '.seller-item')
+                search('.search-product', '.product-item')
+                
+
+                function updateProfile(){
+                    $.ajax({
+                        type: 'POST',
+                        url: '/profile_update/',
+                        data: {
+                            role: 'user',
+                            enroll_id: $('.enroll_id').text(),
+                            password: $('.personal-info #userpassword').val(),
+                            csrfmiddlewaretoken: $('#settings input[name=csrfmiddlewaretoken]').val()
+                        },
+                        success: function (msg) {
+                            if (msg.code == 107){
+                                $('.profile-msg').text(msg.msg)
+                            }
+                        },
+                        error: function (xhr, errmsg, err) {
+                            // add the error to the dom
+                            alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                        }
+                    });
+                }
+                
+                $('.product-view').click(function(){
+                    var id = $(this).find('.p_details').attr('pid'),
+                        name = $(this).find('.p_details').attr('name'),
+                        company = $(this).find('.p_details').attr('company'),
+                        price = $(this).parents('.product-box').find('.product-price-tag').html(),
+                        desc = $(this).find('.p_details').attr('desc');
+
+                    $('.product-show').ready(function(){
+                        $(this).find('.product-id').text(`ID: #${id}`)
+                        $(this).find('.product-name').text(name)
+                        $(this).find('.company-name').text(company)
+                        $(this).find('.product-price').html(price)
+                        $(this).find('.product-desc').text(desc)
+                    });
+                });
+            })
+        </script>
+    </body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    {% include 'css.html' %}
+    {% block 'css' %}
+    {% endblock %}
+
+    <style>
+        form {
+            position: relative;
+        }
+        form::after {
+            position: absolute;
+            content: attr(msg);
+            left: 0;
+            right: 0;
+            margin: auto;
+            text-align: center;
+            width: max-content;
+            color: tomato;
+            font-weight: 600;
+            bottom: -30px;
+        }
+        form.seller::after {
+            bottom: -85px;
+        }
+        form label.id-err,
+        form label.pwd-err {
+            position: relative;
+        }
+        form label.id-err::after,
+        form label.pwd-err::after {
+            position: absolute;
+            content: attr(msg);
+            width: max-content;
+            top: 0;
+            left: 120%;
+            margin: auto;
+            color: red;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body class="authentication-bg authentication-bg-pattern">
+
+    <div class="account-pages mt-5 mb-1">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-10">
+                    <div class="card bg-pattern">
+                        <div class="card-body p-4">
+                            <div class="text-center mb-2">
+                                <h2>{{ appName }}</h2>
+                                <p class="text-muted-40 mb-2 mt-3 ">{{ appTagline }}</p>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="p-sm-3">
+                                        <!-- title-->
+                                        <h4 class="mt-0">User Signin/Signup</h4>
+                                        <p class="text-muted mb-2">Enter your enroll number and password to access account.</p>
+
+                                        <form action="/signup/" method="POST" class="user">
+                                            {% csrf_token %}
+                                            <div class="form-group mb-3">
+                                                <label for="enroll" class="id-err" msg="">Enroll Number</label>
+                                                <input class="form-control id" type="text" id="enroll" name="Enroll" placeholder="Enter enrollment number" required>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="password" class="pwd-err">Password</label>
+                                                <input class="form-control pwd" type="password" required id="password" placeholder="Enter your password">
+                                            </div>
+                                            <div class="form-group mb-0">
+                                                <button class="user-login btn btn-success btn-sm mr-2" type="button"> SignIn/SignUp </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="p-sm-3">
+                                        <!-- title-->
+                                        <h4 class="mt-0">Seller Signin</h4>
+                                        <p class="text-muted mb-2">Enter your RF ID and password to access account.</p>
+
+                                        <form action="#" class="seller">
+                                            {% csrf_token %}
+                                            <div class="form-group mb-3">
+                                                <label for="rfid" class="id-err" msg="">RF ID</label>
+                                                <input class="form-control id" type="text" id="rfid" name="RFID" placeholder="Enter RF ID" required>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="password" class="pwd-err">Password</label>
+                                                <input class="form-control pwd" type="password" required id="password" placeholder="Enter your password">
+                                            </div>
+                                            <div class="form-group mb-0">
+                                                <button class="seller-login btn btn-success btn-sm mr-2 float-sm-left" type="button">Sign In</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end row-->
+
+                        </div> <!-- end card-body -->
+                    </div>
+                    <!-- end card -->
+
+                </div> <!-- end col -->
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- end container -->
+    </div>
+    <!-- end page -->
+
+    <footer class="footer footer-alt">
+        &copy; <a href="javascript:" class="text-white-50">{{ appName }}</a> 2020
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <!-- Vendor js -->
+        <script src="{% static 'js/vendor.min.js' %}"></script>
+
+        <!-- App js -->
+        <script src="{% static 'js/app.min.js' %}"></script>
+
+        <script>
+            $(document).ready(function(){
+                var userForm = $('form.user'),
+                    sellerForm = $('form.seller');
+
+                $('.user-login').click(function(){
+                    var csrf = userForm.find('input[name=csrfmiddlewaretoken]').val(),
+                        id = userForm.find('#enroll').val(),
+                        pwd = userForm.find('#password').val()
+                        role = 'user'
+                    singleEntry(id, role, pwd, csrf)
+                });
+
+                $('.seller-login').click(function(){
+                    var csrf = sellerForm.find('input[name=csrfmiddlewaretoken]').val(),
+                        id = sellerForm.find('#rfid').val(),
+                        pwd = sellerForm.find('#password').val()
+                        role = 'seller'
+                    singleEntry(id, role, pwd, csrf)
+                });
+
+                $('form input').keyup(function(){
+                    $(this).parent().find('label').removeAttr('msg')
+                })
+
+                var singleEntry = function(id, role, pwd, csrf){
+                    $.ajax({
+                        type: 'POST',
+                        url: '/signup/',
+                        data: {
+                            id: id,
+                            role: role,
+                            password : pwd,
+                            csrfmiddlewaretoken: csrf
+                        },
+                        success: function (msg) {
+                            if (msg.code == 100){
+                                window.location = msg.url
+                            } else if (msg.code == 105) {
+                                $(msg.role).find('.id-err').attr('msg', msg.err)
+                            } else if (msg.code == 106) {
+                                $(msg.role).find('.pwd-err').attr('msg', msg.err)
+                            } else {
+                                $(msg.role).attr('msg', msg.code)
+                            }
+                        },
+                        error: function (xhr, errmsg, err) {
+                            // add the error to the dom
+                            alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
+</html>
